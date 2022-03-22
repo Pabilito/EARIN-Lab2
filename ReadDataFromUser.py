@@ -80,7 +80,7 @@ class ReadData:
         print(message)
         for i in range(rows):
             for j in range(columns):
-                mat.itemset((i, j), self.__ReadFloat("Please write value for cell: [{}][{}]".format(i, j), 0))
+                mat.itemset((i, j), self.__ReadFloat("Please write value for cell: [{}][{}].".format(i, j), 0))
         self.data.append(mat)
 
     def PerformReadingSequence(self):
@@ -91,9 +91,9 @@ class ReadData:
         self.data.append(self.range)
         self.__ReadMatrixFromUser("Reading matrix 'A'.", self.data[0], self.data[0])
         self.__ReadMatrixFromUser("Reading matrix 'b'.", self.data[0], 1)
-        self.__ReadFloat("Please provide 'c' parameter [float]", 1)
+        self.__ReadFloat("Please provide 'c' parameter [float].", 1)
         self.__ReadIntWithRange("Please provide population size [restricted int].\nProgram will not accept population greater than {}. If you need larger range, edit _init_.".format(self.maxPop), 1, self.maxPop, 1)
-        self.__ReadFloatWithRange("Please provide crossover probability in range [0,1] [restricted float]", 0, 1)
-        self.__ReadFloatWithRange("Please provide mutation probability in range [0,1] [restricted float]", 0, 1)
+        self.__ReadFloatWithRange("Please provide crossover probability in range [0,1] [restricted float].", 0, 1)
+        self.__ReadFloatWithRange("Please provide mutation probability in range [0,1] [restricted float].", 0, 1)
         self.__ReadIntWithRange("Please provide number of iterations [restricted int].\nProgram will not accept number greater than {}. If you need larger range, edit _init_.".format(self.maxIter), 1, self.maxIter, 1)
         return self.data
