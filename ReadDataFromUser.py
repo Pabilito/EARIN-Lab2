@@ -84,6 +84,7 @@ class ReadData:
         self.data.append(mat)
 
     def PerformReadingSequence(self):
+        #Order is: Dimensionality, Array of Range, Matrix A, Matrix B, c, Population size, Crossover, Mutation, Iterations
         self.__ReadInt("Please provide dimensionality 'i' [int].")
         for dimension in range(self.data[0]):
             self.range.append(self.__ReadIntWithRange("Dimension {}. Please provide d>=1 [restricted int].\nProgram will not accept d greater than {}. If you need larger range, edit _init_.".format(dimension+1, self.maxD), 1, self.maxD, 0))
