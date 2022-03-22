@@ -9,7 +9,7 @@ class ReadData:
         self.maxPop = 10000         #Max population and max number of iteration can be easilly changed here if needed.
         self.maxIter = 10000
 
-    def ReadInt(self, message):
+    def __ReadInt(self, message):   #This method should not be needed elswere, so it is private
         while(1):
             print(line)
             print(message)
@@ -22,7 +22,7 @@ class ReadData:
                 print('Number could not be accepted, choose again!')
                 continue
 
-    def ReadIntWithRange(self, message, min, max):
+    def __ReadIntWithRange(self, message, min, max):
         while(1):
             print(line)
             print(message)
@@ -38,7 +38,7 @@ class ReadData:
                 print('Number could not be accepted, choose again!')
                 continue
 
-    def ReadFloat(self, message):
+    def __ReadFloat(self, message):
         while(1):
             print(line)
             print(message)
@@ -51,7 +51,7 @@ class ReadData:
                 print('Number could not be accepted, choose again!')
                 continue
     
-    def ReadFloatWithRange(self, message, min, max):
+    def __ReadFloatWithRange(self, message, min, max):
         while(1):
             print(line)
             print(message)
@@ -68,16 +68,13 @@ class ReadData:
                 continue
 
     def PerformReadingSequence(self):
-        self.ReadInt("Please provide dimensionality [int].")
-        self.ReadIntWithRange("Please provide d>=1 [restricted int].\nProgram will not accept d greater than {}. If you need larger range, edit _init_.".format(self.maxD), 1, self.maxD)
+        self.__ReadInt("Please provide dimensionality [int].")
+        self.__ReadIntWithRange("Please provide d>=1 [restricted int].\nProgram will not accept d greater than {}. If you need larger range, edit _init_.".format(self.maxD), 1, self.maxD)
         #Read A
         #Read b
-        self.ReadFloat("Please provide 'c' parameter [float]")
-        self.ReadIntWithRange("Please provide population size [restricted int].\nProgram will not accept population greater than {}. If you need larger range, edit _init_.".format(self.maxPop), 1, self.maxPop)
-        self.ReadFloatWithRange("Please provide crossover probability in range [0,1] [restricted float]", 0, 1)
-        self.ReadFloatWithRange("Please provide mutation probability in range [0,1] [restricted float]", 0, 1)
-        self.ReadIntWithRange("Please provide number of iterations [restricted int].\nProgram will not accept number greater than {}. If you need larger range, edit _init_.".format(self.maxIter), 1, self.maxIter)
+        self.__ReadFloat("Please provide 'c' parameter [float]")
+        self.__ReadIntWithRange("Please provide population size [restricted int].\nProgram will not accept population greater than {}. If you need larger range, edit _init_.".format(self.maxPop), 1, self.maxPop)
+        self.__ReadFloatWithRange("Please provide crossover probability in range [0,1] [restricted float]", 0, 1)
+        self.__ReadFloatWithRange("Please provide mutation probability in range [0,1] [restricted float]", 0, 1)
+        self.__ReadIntWithRange("Please provide number of iterations [restricted int].\nProgram will not accept number greater than {}. If you need larger range, edit _init_.".format(self.maxIter), 1, self.maxIter)
         return self.data
-
-D = ReadData()
-D.PerformReadingSequence()

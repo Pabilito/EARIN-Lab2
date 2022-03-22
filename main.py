@@ -1,8 +1,8 @@
-
-
+from ReadDataFromUser import ReadData
 
 def Main():
-    #Do main logic
+    A = ReadData().PerformReadingSequence()
+    print(A)
     return
 
 Main()
