@@ -80,7 +80,7 @@ class ReadData:
         print(message)
         for i in range(rows):
             for j in range(columns):
-                mat.itemset((i, j), self.__ReadFloat("Please write value for cell: [', i, '][', j, ']", 0))
+                mat.itemset((i, j), self.__ReadFloat("Please write value for cell: [{}][{}]".format(i, j), 0))
         self.data.append(mat)
 
     def PerformReadingSequence(self):
