@@ -1,9 +1,13 @@
+import numpy as np
 #For aesthetic purposes
 line = "-------------------------------------------------------------------"
 
 class ReadData:
     def __init__(self):
         self.data = []
+        self.maxD = 100             #I assume that 2^100 is enough range
+        self.maxPop = 10000         #Max population and max number of iteration can be easilly changed here if needed.
+        self.maxIter = 10000
 
     def ReadInt(self, message):
         while(1):
@@ -63,5 +67,17 @@ class ReadData:
                 print('Number could not be accepted, choose again!')
                 continue
 
-#D = ReadData()
-#D.ReadFloatWithRange("test", 1, 2)
+    def PerformReadingSequence(self):
+        self.ReadInt("Please provide dimensionality [int].")
+        self.ReadIntWithRange("Please provide d>=1 [restricted int].\nProgram will not accept d greater than {}. If you need larger range, edit _init_.".format(self.maxD), 1, self.maxD)
+        #Read A
+        #Read b
+        self.ReadFloat("Please provide 'c' parameter [float]")
+        self.ReadIntWithRange("Please provide population size [restricted int].\nProgram will not accept population greater than {}. If you need larger range, edit _init_.".format(self.maxPop), 1, self.maxPop)
+        self.ReadFloatWithRange("Please provide crossover probability in range [0,1] [restricted float]", 0, 1)
+        self.ReadFloatWithRange("Please provide mutation probability in range [0,1] [restricted float]", 0, 1)
+        self.ReadIntWithRange("Please provide number of iterations [restricted int].\nProgram will not accept number greater than {}. If you need larger range, edit _init_.".format(self.maxIter), 1, self.maxIter)
+        return self.data
+
+D = ReadData()
+D.PerformReadingSequence()
