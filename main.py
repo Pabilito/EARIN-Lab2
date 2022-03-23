@@ -14,6 +14,3 @@ def Main():
     return
 
 Main()
-
-#TO DO
-#Sprawdzić czy A musi być Positive Definite
