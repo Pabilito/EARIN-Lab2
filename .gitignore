@@ -1,0 +1,5 @@
+#ignore elpy generated files
+yapf*
+
+#ignore __pycache__
+__pycache__/
