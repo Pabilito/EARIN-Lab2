@@ -30,6 +30,7 @@ class Algorithm:
         return
 
     def __Mutation(self):
+        #Perform mutation based on probability
         return
 
     def __SurvivorSelection(self):
@@ -57,8 +58,8 @@ class Algorithm:
             self.x = []
             for dim in range(self.Data[0]):
                 decimal = int(self.population[popCount][dim], 2)
-                maxInt = int(pow(2, self.Data[1][dim]))
-                if(decimal > maxInt):   #Two's compliment conversion. Honestly, I have no idea how to do it better.
+                maxInt = pow(2, self.Data[1][dim])
+                if(decimal > maxInt):   #Two's compliment conversion for negative numbers. Honestly, I have no idea if there is a way to do it better.
                     decimal = decimal - maxInt*2            
                 self.x.append(decimal)
             self.populationDecimal.append(self.x)    
@@ -73,7 +74,7 @@ class Algorithm:
 
     def PerformGeneticAlgorithm(self):
         self.__InitializePopulation()
-        print(self.population)
+        #print(self.population)
         self.__LoopUntilTerminationCriterionReached()
         self.__ReturnResultToUser()
         return
