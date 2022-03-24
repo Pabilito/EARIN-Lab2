@@ -88,16 +88,13 @@ class Algorithm:
             probability += i[2] / sum_of_values
             p_s.append(probability)
 
-        first = self.__ruletteWheel(
-            p_s, fit_function
-        )  #I have no idea how many times we should choose, thus for now it will be just once
+        first = self.__ruletteWheel(p_s, fit_function)
         second = self.__ruletteWheel(p_s, fit_function)
         #Then we perform Single Point crossover for those chosen fit
-
         new_first, new_second = self.__singlePointCrossover(first, second)
-
         self.population[self.population.index(first)] = new_first
         self.population[self.population.index(second)] = new_second
+
         return
 
     def __ruletteWheel(self, p_s, fit_function):
@@ -121,12 +118,15 @@ class Algorithm:
         '''
         Performes the single point crossover on the given points
         '''
-        swap_range = len(first)
-        if len(first) > len(second):
-            swap_range = len(second)
-        point = ra.randint(1, swap_range)
-        new_first = first[:point] + second[point:]
-        new_second = second[:point] + first[point:]
+        new_first = []
+        new_second = []
+        for dim in range(self.dimensionality):
+            swap_range = len(first[dim])
+            if len(first[dim]) > len(second[dim]):
+                swap_range = len(second[dim])
+            point = ra.randint(1, swap_range)
+            new_first.append(first[dim][:point] + second[dim][point:])
+            new_second.append(second[dim][:point] + first[dim][point:])
         return new_first, new_second
 
     def __mutation(self):
@@ -185,7 +185,7 @@ class Algorithm:
 
     def performGeneticAlgorithm(self):
         self.__initializePopulation()
-        #print(self.population)
+        #        print(self.population)
         self.__loopUntilTerminationCriterionReached()
         self.__returnResultToUser()
         return
