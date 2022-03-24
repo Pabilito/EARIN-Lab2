@@ -88,10 +88,16 @@ class Algorithm:
             probability += i[2] / sum_of_values
             p_s.append(probability)
 
-        selected = self.__ruletteWheel(
+        first = self.__ruletteWheel(
             p_s, fit_function
         )  #I have no idea how many times we should choose, thus for now it will be just once
+        second = self.__ruletteWheel(p_s, fit_function)
         #Then we perform Single Point crossover for those chosen fit
+
+        new_first, new_second = self.__singlePointCrossover(first, second)
+
+        self.population[self.population.index(first)] = new_first
+        self.population[self.population.index(second)] = new_second
         return
 
     def __ruletteWheel(self, p_s, fit_function):
@@ -111,11 +117,17 @@ class Algorithm:
                 break
         return selected_points
 
-    def __singlePointCrossover(self, selected_points):
+    def __singlePointCrossover(self, first, second):
         '''
         Performes the single point crossover on the given points
         '''
-        pass
+        swap_range = len(first)
+        if len(first) > len(second):
+            swap_range = len(second)
+        point = ra.randint(1, swap_range)
+        new_first = first[:point] + second[point:]
+        new_second = second[:point] + first[point:]
+        return new_first, new_second
 
     def __mutation(self):
         #Perform mutation based on probability
