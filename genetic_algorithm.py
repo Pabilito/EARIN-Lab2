@@ -6,7 +6,16 @@ class Algorithm:
     def __init__(self, inputData):
         #Order is: Dimensionality, Array of Range, Matrix A, Matrix B, c, Population size, Crossover, Mutation, Iterations
         #ExampleData = [2, [4, 5], np.array([[1., 2.],[3., 4.]]), np.array([[1.],[2.]]), 435.0, 234, 1.0, 0.123, 2334]
-        self.Data = inputData
+        data = inputData
+        self.dimensionality = data[0]
+        self.array_of_range = data[1]
+        self.matrix_A = data[2]
+        self.matrix_B = data[3]
+        self.c = data[4]
+        self.population_size = data[5]
+        self.crossover_param = data[6]
+        self.mutation_param = data[7]
+        self.iterations = data[8]
         self.population = [
         ]  #Storing current 'x' binary vectors (initialized and then survivors)
         self.populationDecimal = []  #Storing current 'x' decimal vectors
@@ -14,22 +23,52 @@ class Algorithm:
         self.currentMaxIndividuals = []
 
     def __initializePopulation(self):
-        for _ in range(self.Data[5]):  #Population size
+        for _ in range(self.population_size):  #Population size
             self.x = []
-            for dim in range(self.Data[0]):  #One x for each dimension
+            for dim in range(self.dimensionality):  #One x for each dimension
                 searchedInt = pow(
-                    2, self.Data[1][dim])  #Random values are initialized
+                    2,
+                    self.array_of_range[dim])  #Random values are initialized
                 randomInt = (ra.randrange(-1 * searchedInt, searchedInt - 1))
-                binary = np.binary_repr(randomInt, self.Data[1][dim] +
+                binary = np.binary_repr(randomInt, self.array_of_range[dim] +
                                         1)  #Conversion into two's compliment
                 self.x.append(binary)
             self.population.append(self.x)
         return
 
+    def __fitness(self):
+        '''
+        Calculates the fitness function values.
+
+        The best points are those one which are the closest to the minima - the smallest the better ( ͡°͜ʖ ͡°).
+        Hence, in order to give a score first of all values of all x are being calculated, and then the score will
+        be given in order of values
+
+        returns the list of [x's, x_{10}, weight] pairs
+
+        x_{10} - is the decimal notation
+        '''
+        values = []
+        self.__convertBinaryComplimentToDecimal(
+        )  #We will operate on decimal numbers for function result calculation
+        for popCount in range(self.population_size):  #Population size
+            dec = self.populationDecimal[popCount]
+            values.append(
+                [self.population[popCount], dec,
+                 self.__calculateF(dec)])
+        values.sort(key=lambda l: l[2]
+                    )  #sorting [x's, x_{10}, values] pairs ascending by values
+        #the better the result, the higher point it gets
+        for i in range(len(values)):
+            values[i][2] = i
+        return values
+
     def __crossover(self):
         #First we calculate fitness and based on it we do Roulette-wheel selection with scaling
         '''
         Performes the crossover operation in the algorithm.
+
+        Parameter pc is the probability of crossover (??? roulette wheel selection doesn't require such thing I believe).
 
         Pt - are points selected during the reproduction (selection), better points are selected with higher probability
         p_s - probability of selection of an individual
@@ -37,37 +76,38 @@ class Algorithm:
         
         Roulette wheel selection - p_s(Pt_i) = q(Pt_i)/ sum of all q(Pt_k), for all k's
         '''
+        fit_function = self.__fitness()
         sum_of_values = 0
-        for i in self.population:
+        for i in fit_function:
             #            sum_of_values += i  #look out for the case when sum = 0
-            sum_of_values += 1  #look out for the case when sum = 0
+            sum_of_values += i[2]  #look out for the case when sum = 0
         #important assumption (for now) -> it is assumed, that there are no negative or zero q(Pt_i)
-        p_s = []  #table of all p_s(Pt_i)
         probability = 0
-        for i in self.population:
-            probability = 0  #just for dbg
-            #            probability += i / sum_of_values #i is the vector:( of binary number - fix that
+        p_s = []
+        for i in fit_function:
+            probability += i[2] / sum_of_values
             p_s.append(probability)
 
-        self.__ruletteWheel(
-            p_s
+        selected = self.__ruletteWheel(
+            p_s, fit_function
         )  #I have no idea how many times we should choose, thus for now it will be just once
-
         #Then we perform Single Point crossover for those chosen fit
-        self.__ruletteWheel(p_s)
         return
 
-    def __ruletteWheel(self, p_s):
+    def __ruletteWheel(self, p_s, fit_function):
         '''
         Implementation of the roulette wheel selection.
 
         It takes the probability of selection of an individual as an input
+
+        returns the points that are chosen
         '''
+        new_population = fit_function
         random = ra.random()  #choosing random float between 0 and 1
         selected_points = None
-        for i in p_s:
-            if random <= i:
-                selected_points = self.population[p_s.index(i)]
+        for i in range(len(p_s)):
+            if random <= p_s[i]:
+                selected_points = new_population[i][0]
                 break
         return selected_points
 
@@ -81,16 +121,23 @@ class Algorithm:
         #Perform mutation based on probability
         return
 
+    def __calculateF(self, dec):
+        '''
+        Calculates the function value at given point
+
+        dec - given population member in the decimal notation
+        '''
+        result = np.matmul(np.matmul(np.transpose(dec), self.matrix_A), dec)
+        result += np.matmul(np.transpose(self.matrix_B), dec) + self.c
+        return result
+
     def __survivorSelection(self):
-        self.__convertBinaryComplimentToDecial(
+        self.__convertBinaryComplimentToDecimal(
         )  #We will operate on decimal numbers for function result calculation
-        for popCount in range(self.Data[5]):  #Population size
+        for popCount in range(self.population_size):  #Population size
             dec = self.populationDecimal[popCount]
             #Calculate current value - the higher the better
-            result = np.matmul(np.matmul(np.transpose(dec), self.Data[2]), dec)
-            result = result + np.matmul(np.transpose(self.Data[3]),
-                                        dec) + self.Data[4]
-
+            result = self.__calculateF(dec)
             #DELETE THIS 2 LINES LATER - now just for testing
             self.currentMax = result
             self.currentMaxIndividuals = self.populationDecimal[popCount]
@@ -102,13 +149,13 @@ class Algorithm:
         print('X values for maximum F(x): ', self.currentMaxIndividuals)
         return
 
-    def __convertBinaryComplimentToDecial(self):
+    def __convertBinaryComplimentToDecimal(self):
         self.populationDecimal = []
-        for popCount in range(self.Data[5]):
+        for popCount in range(self.population_size):
             self.x = []
-            for dim in range(self.Data[0]):
+            for dim in range(self.dimensionality):
                 decimal = int(self.population[popCount][dim], 2)
-                maxInt = pow(2, self.Data[1][dim])
+                maxInt = pow(2, self.array_of_range[dim])
                 if (
                         decimal > maxInt
                 ):  #Two's compliment conversion for negative numbers. Honestly, I have no idea if there is a way to do it better.
@@ -118,7 +165,7 @@ class Algorithm:
         return
 
     def __loopUntilTerminationCriterionReached(self):
-        for _ in range(self.Data[8]):
+        for _ in range(self.iterations):
             self.__crossover()
             self.__mutation()
             self.__survivorSelection()
