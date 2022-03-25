@@ -9,7 +9,7 @@ def Main():
     DataFromUser = [
         2, [4, 5],
         np.array([[-1., -2.], [-3., -4.]]),
-        np.array([[1.], [2.]]), 435.0, 10, 1.0, 0.123, 2334
+        np.array([[1.], [2.]]), 435.0, 10, 1.0, 0.123, 234
     ]
     # Exemplary data - uncomment numpy import to use
 

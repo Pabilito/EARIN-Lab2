@@ -138,18 +138,14 @@ class Algorithm:
 
     def __mutation(self):
         #Perform mutation based on probability
-        
         for i in range(self.population_size):                                   #Population size
             for j in range(self.dimensionality):
                 for k in range(self.array_of_range[j]+1):                       #1 more bit for sign 
-                    if(ra.random() > self.mutation_param):                      #choosing random float between 0 and 1
-                        '''HERE will be mutation itself
-                        print(self.population[i][j][k])
-                        self.population[i][j][k] = str(1-int(self.population[i][j][k]))   #Bit swap: 1-0=1, 1-1=0
-                        print(self.population[i][j][k]) 
-                        '''
-                quit()
-        
+                    if(ra.random() < self.mutation_param):                      #choosing random float between 0 and 1 (1 not included)                     
+                        temp1 = self.population[i][j][:k]
+                        temp2 = str(1-int(self.population[i][j][k]))            #some fun with types conversion
+                        temp3 = self.population[i][j][k+1:]
+                        self.population[i][j] = temp1+temp2+temp3
         return
 
     def __calculateF(self, dec):
@@ -175,7 +171,7 @@ class Algorithm:
                 self.currentMaxIndividuals = self.populationDecimal[popCount]
         #FIFO means that we take data generated during mutation and crossover for the next phase
 
-        #self.__returnResultToUser()
+        self.__returnResultToUser()
         return
 
     def __returnResultToUser(self):
