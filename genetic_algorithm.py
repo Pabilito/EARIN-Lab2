@@ -153,7 +153,7 @@ class Algorithm:
             #DELETE THIS 2 LINES LATER - now just for testing
             self.currentMax = result
             self.currentMaxIndividuals = self.populationDecimal[popCount]
-        #FIFO ???
+        #FIFO means that we take data generated during mutation and crossover for the next phase
         return
 
     def __returnResultToUser(self):
@@ -185,7 +185,6 @@ class Algorithm:
 
     def performGeneticAlgorithm(self):
         self.__initializePopulation()
-        #        print(self.population)
         self.__loopUntilTerminationCriterionReached()
         self.__returnResultToUser()
         return
