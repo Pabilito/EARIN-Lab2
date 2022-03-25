@@ -7,9 +7,9 @@ def Main():
     ### Test data ###
     #Order is: Dimensionality, Array of Range, Matrix A, Matrix B, c, Population size, Crossover, Mutation, Iterations
     DataFromUser = [
-        2, [4, 5],
+        2, [5, 6],
         np.array([[-1., -2.], [-3., -4.]]),
-        np.array([[1.], [2.]]), 435.0, 10, 1.0, 0.123, 234
+        np.array([[1.], [2.]]), 435.0, 100, 0.6, 0.123, 212
     ]
     # Exemplary data - uncomment numpy import to use
 

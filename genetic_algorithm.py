@@ -170,8 +170,7 @@ class Algorithm:
                 self.currentMax = result
                 self.currentMaxIndividuals = self.populationDecimal[popCount]
         #FIFO means that we take data generated during mutation and crossover for the next phase
-
-        self.__returnResultToUser()
+        #self.__returnResultToUser()
         return
 
     def __returnResultToUser(self):
