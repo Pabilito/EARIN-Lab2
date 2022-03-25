@@ -34,13 +34,20 @@ class Algorithm:
                                         1)  #Conversion into two's compliment
                 self.x.append(binary)
             self.population.append(self.x)
+        self.__assignFirstMax()
+        return
+
+    def __assignFirstMax(self): #To later avoid comparison with nonexistent value
+        self.__convertBinaryComplimentToDecimal()
+        #Calculate the first value, it will be our first max
+        self.currentMax = self.__calculateF(self.populationDecimal[0])
         return
 
     def __fitness(self):
         '''
         Calculates the fitness function values.
 
-        The best points are those one which are the closest to the minima - the smallest the better ( ͡°͜ʖ ͡°).
+        The best points are those one which are the closest to the maxima - the bigger the better ( ͡°͜ʖ ͡°).
         Hence, in order to give a score first of all values of all x are being calculated, and then the score will
         be given in order of values
 
@@ -131,6 +138,18 @@ class Algorithm:
 
     def __mutation(self):
         #Perform mutation based on probability
+        
+        for i in range(self.population_size):                                   #Population size
+            for j in range(self.dimensionality):
+                for k in range(self.array_of_range[j]+1):                       #1 more bit for sign 
+                    if(ra.random() > self.mutation_param):                      #choosing random float between 0 and 1
+                        '''HERE will be mutation itself
+                        print(self.population[i][j][k])
+                        self.population[i][j][k] = str(1-int(self.population[i][j][k]))   #Bit swap: 1-0=1, 1-1=0
+                        print(self.population[i][j][k]) 
+                        '''
+                quit()
+        
         return
 
     def __calculateF(self, dec):
@@ -150,10 +169,13 @@ class Algorithm:
             dec = self.populationDecimal[popCount]
             #Calculate current value - the higher the better
             result = self.__calculateF(dec)
-            #DELETE THIS 2 LINES LATER - now just for testing
-            self.currentMax = result
-            self.currentMaxIndividuals = self.populationDecimal[popCount]
+            #Store the best result
+            if(result > self.currentMax):
+                self.currentMax = result
+                self.currentMaxIndividuals = self.populationDecimal[popCount]
         #FIFO means that we take data generated during mutation and crossover for the next phase
+
+        #self.__returnResultToUser()
         return
 
     def __returnResultToUser(self):
