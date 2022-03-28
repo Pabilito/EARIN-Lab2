@@ -174,8 +174,11 @@ class Algorithm:
         return
 
     def __returnResultToUser(self):
-        print('Maximum value: ', self.currentMax)
-        print('X values for maximum F(x): ', self.currentMaxIndividuals)
+        print('Last population: ')
+        for i in range(self.population_size):
+            print('X [', i, ']: ', self.populationDecimal[i], ' F(x)' ,self.__calculateF(self.populationDecimal[i]))
+        print('\nMaximum value F(x): ', self.currentMax)
+        print('X values for maximum F(x): ', self.currentMaxIndividuals, '\n')
         return
 
     def __convertBinaryComplimentToDecimal(self):
